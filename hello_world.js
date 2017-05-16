@@ -1,17 +1,33 @@
 (function(ext) {
-    // Code to be run when the user closes the window, reloads the page, etc.    
+    var ext = this;
+
+    // Cleanup function when the extension is unloaded
     ext._shutdown = function() {};
-    
-    // Shows the status of the extension 0 = red, 1 = yellow, and 2 = green
+
+    // Status reporting code
+    // Use this to report missing hardware, plugin or unsupported browser
     ext._getStatus = function() {
         return {status: 2, msg: 'Ready'};
     };
-    // Descriptions of the blocks and menus the extension adds
+
+    // Functions for block with type 'w' will get a callback function as the 
+    // final argument. This should be called to indicate that the block can
+    // stop waiting.
+    ext.hello_world = function(callback) {
+        wait = Math.random();
+        console.log('Hello world');
+        window.setTimeout(function() {
+            callback();
+        }, wait*10000);
+    };
+
+    // Block and block menu descriptions
     var descriptor = {
         blocks: [
-			 [' ', 'hello world'] 
+            ['w', 'Hello world', 'hello_world'],
         ]
     };
+
     // Register the extension
-    ScratchExtensions.register('Hello World', descriptor, ext);
+    ScratchExtensions.register('Hello world', descriptor, ext);
 })({});
